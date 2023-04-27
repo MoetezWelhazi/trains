@@ -2,6 +2,8 @@ public class WagonPorteConteneur extends WagonMarchandises{
 
     int longueurConteneur;
 
+    TypeWagon type = TypeWagon.CONTENEUR;
+
     public int getLongueurConteneur() {
         return longueurConteneur;
     }
@@ -18,6 +20,7 @@ public class WagonPorteConteneur extends WagonMarchandises{
 
     @Override
     public void decharger(double poids) {
-        this.chargeActuelle -= poids;
+        double newCharge = this.chargeActuelle - poids;
+        this.chargeActuelle =  (newCharge < 0) ? 0 : newCharge ;
     }
 }

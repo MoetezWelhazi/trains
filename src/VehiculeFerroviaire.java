@@ -19,7 +19,7 @@ public abstract class VehiculeFerroviaire {
         return poidsAVide;
     }
 
-    public double getVitessemaximale() {
+    public double getVitesseMaximale() {
         return vitessemaximale;
     }
 
@@ -38,6 +38,14 @@ public abstract class VehiculeFerroviaire {
     public boolean isMatiereDangereuse() {
         return matiereDangereuse;
     }
+
+    public abstract double getPoidsTotale();
+
+    public abstract double getTraction();
+
+    public abstract double getSurcapacite();
+
+    public abstract double getCapaciteRestante();
 
     public VehiculeFerroviaire(boolean matiereDangereuse, double poidsAVide, double vitessemaximale, double chargeMaximale, double longueur, double hauteur) {
         this.matiereDangereuse = matiereDangereuse;

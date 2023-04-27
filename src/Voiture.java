@@ -5,6 +5,8 @@ public class Voiture extends Wagon{
 
     int nombrePassagersTotales;
 
+    TypeWagon type = TypeWagon.VOITURE;
+
     public int getNombrePlacesAssises() {
         return nombrePlacesAssises;
     }
@@ -17,8 +19,22 @@ public class Voiture extends Wagon{
         this.nombrePassagersTotales = nombrePassagersTotales;
     }
 
+    @Override
+    public double getSurcapacite(){
+        double x = this.getNombrePassagersTotales() - this.getNombrePlacesAssises();
+        return x < 0 ? 0 : x;
+    }
+
+    @Override
+    public double getCapaciteRestante(){
+        if (this.getSurcapacite() > 0)
+            return 0;
+        return this.getNombrePlacesAssises() - this.getNombrePassagersTotales();
+    }
+
     public void modifierNombrePassagers(int x) {
-        this.nombrePassagersTotales += x;
+        int newNbr = this.nombrePassagersTotales + x;
+        this.nombrePassagersTotales = (newNbr < 0) ? 0 : newNbr;
     }
 
     @Override

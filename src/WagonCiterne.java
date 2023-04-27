@@ -2,6 +2,8 @@ public class WagonCiterne extends WagonMarchandises{
 
     String typeProduit;
 
+    TypeWagon type = TypeWagon.CITERNE;
+
     public String getTypeProduit() {
         return typeProduit;
     }
@@ -18,6 +20,7 @@ public class WagonCiterne extends WagonMarchandises{
 
     @Override
     public void decharger(double poids) {
-        this.chargeActuelle -= poids;
+        double newCharge = this.chargeActuelle - poids;
+        this.chargeActuelle =  (newCharge < 0) ? 0 : newCharge ;
     }
 }

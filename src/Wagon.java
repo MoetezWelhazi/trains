@@ -7,6 +7,25 @@ public abstract class Wagon extends VehiculeFerroviaire{
         this.chargeActuelle = chargeActuelle;
     }
 
+    public double getPoidsTotale(){
+        return this.chargeActuelle + this.poidsAVide;
+    }
+
+    public double getTraction(){
+        return 0;
+    }
+
+    public double getSurcapacite(){
+        double surcharge = this.chargeActuelle - this.chargeMaximale;
+        return surcharge < 0 ? 0 : surcharge;
+    }
+
+    public double getCapaciteRestante(){
+        if (getSurcapacite() > 0)
+            return 0;
+        return this.chargeMaximale - this.chargeActuelle;
+    }
+
     public double getChargeActuelle() {
         return chargeActuelle;
     }
