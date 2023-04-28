@@ -13,6 +13,8 @@ public class WagonCiterne extends WagonMarchandises{
         this.typeProduit = typeProduit;
     }
 
+
+
     @Override
     public void charger(double poids) {
         this.chargeActuelle += poids;

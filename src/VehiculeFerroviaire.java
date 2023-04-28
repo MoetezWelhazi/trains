@@ -13,6 +13,8 @@ public abstract class VehiculeFerroviaire {
 
     double hauteur;
 
+    TypeWagon type;
+
     public abstract boolean estValideSur(TypeTrain typeTrain);
 
     public double getPoidsAVide() {

@@ -14,4 +14,5 @@ public abstract class WagonMarchandises extends Wagon{
         return typeTrain == TypeTrain.MARCHANDISES;
     };
 
+
 }
