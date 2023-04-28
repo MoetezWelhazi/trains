@@ -2,11 +2,12 @@ public class WagonBetailler extends WagonMarchandises {
 
     String typeAnimal;
 
-    TypeWagon type = TypeWagon.BETAILLER;
+    ;
 
     public WagonBetailler(boolean matiereDangereuse, double poidsAVide, double vitessemaximale, double chargeMaximale, double longueur, double hauteur, double chargeActuelle, String typeAnimal) {
         super(matiereDangereuse, poidsAVide, vitessemaximale, chargeMaximale, longueur, hauteur, chargeActuelle);
         this.typeAnimal = typeAnimal;
+        this.type = TypeWagon.BETAILLER;
     }
 
     @Override

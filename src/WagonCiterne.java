@@ -2,8 +2,6 @@ public class WagonCiterne extends WagonMarchandises{
 
     String typeProduit;
 
-    TypeWagon type = TypeWagon.CITERNE;
-
     public String getTypeProduit() {
         return typeProduit;
     }
@@ -11,6 +9,8 @@ public class WagonCiterne extends WagonMarchandises{
     public WagonCiterne(boolean matiereDangereuse, double poidsAVide, double vitessemaximale, double chargeMaximale, double longueur, double hauteur, double chargeActuelle, String typeProduit) {
         super(matiereDangereuse, poidsAVide, vitessemaximale, chargeMaximale, longueur, hauteur, chargeActuelle);
         this.typeProduit = typeProduit;
+        this.type = TypeWagon.CITERNE;
+
     }
 
 

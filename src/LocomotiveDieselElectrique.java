@@ -1,6 +1,6 @@
 public class LocomotiveDieselElectrique extends Locomotive{
 
-    int capaciteReservoir;
+    private int capaciteReservoir;
 
     public int getCapaciteReservoir() {
         return capaciteReservoir;
@@ -19,5 +19,6 @@ public class LocomotiveDieselElectrique extends Locomotive{
     public LocomotiveDieselElectrique(boolean matiereDangereuse, double poidsAVide, double vitessemaximale, double chargeMaximale, double longueur, double hauteur, double capaciteTraction, int capaciteReservoir) {
         super(matiereDangereuse, poidsAVide, vitessemaximale, chargeMaximale, longueur, hauteur, capaciteTraction);
         this.capaciteReservoir = capaciteReservoir;
+        this.type = TypeWagon.LOCO;
     }
 }

@@ -2,8 +2,6 @@ public class WagonPorteConteneur extends WagonMarchandises{
 
     int longueurConteneur;
 
-    TypeWagon type = TypeWagon.CONTENEUR;
-
     public int getLongueurConteneur() {
         return longueurConteneur;
     }
@@ -11,6 +9,8 @@ public class WagonPorteConteneur extends WagonMarchandises{
     public WagonPorteConteneur(boolean matiereDangereuse, double poidsAVide, double vitessemaximale, double chargeMaximale, double longueur, double hauteur, double chargeActuelle, int longueurConteneur) {
         super(matiereDangereuse, poidsAVide, vitessemaximale, chargeMaximale, longueur, hauteur, chargeActuelle);
         this.longueurConteneur = longueurConteneur;
+        this.type = TypeWagon.CONTENEUR;
+
     }
 
     @Override

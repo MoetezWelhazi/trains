@@ -5,8 +5,6 @@ public class Voiture extends Wagon{
 
     int nombrePassagersTotales;
 
-    TypeWagon type = TypeWagon.VOITURE;
-
     public int getNombrePlacesAssises() {
         return nombrePlacesAssises;
     }
@@ -46,5 +44,6 @@ public class Voiture extends Wagon{
         super(matiereDangereuse, poidsAVide, vitessemaximale, chargeMaximale, longueur, hauteur, chargeActuelle);
         this.nombrePlacesAssises = nombrePlacesAssises;
         this.nombrePassagersTotales = nombrePassagersTotales;
+        this.type  = TypeWagon.VOITURE;
     }
 }

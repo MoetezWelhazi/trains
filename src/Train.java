@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Train {
 
-    ArrayList<VehiculeFerroviaire> vehicules;
+    ArrayList<VehiculeFerroviaire> vehicules = new ArrayList<VehiculeFerroviaire>();
 
     TypeTrain typeDeTrain;
 
@@ -12,7 +12,8 @@ public class Train {
         return typeDeTrain;
     }
 
-    public Train(ArrayList<Locomotive> locomotiveArrayList,ArrayList<Wagon> wagonArrayList){
+    public Train(ArrayList<Locomotive> locomotiveArrayList,ArrayList<Wagon> wagonArrayList, TypeTrain typeTrain){
+        this.typeDeTrain = typeTrain;
         for (int i = 0; i < locomotiveArrayList.size()/2; i++){
             vehicules.add(locomotiveArrayList.get(i));
         }
@@ -28,10 +29,9 @@ public class Train {
         }
     }
 
-    //diviser le train en 2 puis l'ajout en milieu
+    //l'ajout se fait en milieu
     public void ajoutWagon(Wagon wagon){
-        int position = (int) Math.floor(this.vehicules.size());
-        this.vehicules.add(position,wagon);
+        this.vehicules.add(vehicules.size()/2,wagon);
     }
 
     public void supprimerWagon(Wagon wagon){
@@ -42,12 +42,28 @@ public class Train {
         }
     }
 
-    public void ajoutLocomotive(Locomotive locomotive){
+    public void ajoutLocomotive(Locomotive locomotive, int nbLoc){
+        int nbLocomotiveTete = 1;
+        if(vehicules.get(0) instanceof Wagon) {
+            vehicules.add(0, locomotive);
+            return;
+        }
+        if(vehicules.get(0) instanceof Locomotive && nbLoc == 1){
+            vehicules.add(vehicules.size(),locomotive);
+            return;
+        }
         if (nbLocomotive % 2 == 1){
             for (int i = 0; i < vehicules.size(); i++){
-                if (vehicules.get(i) instanceof Wagon){
-                    vehicules.add(i,locomotive);
+                if (vehicules.get(i+1) instanceof Wagon){
+                    if(nbLocomotiveTete % 2 == 1){ //le nombre de locomotives dans la tete du train est imppair lorsque le nombre total est impair donc on doit ajouter le locomotive dans la tete
+                        vehicules.add(0,locomotive);
+                    }
+                    else{
+                        vehicules.add(vehicules.size(),locomotive);
+                    }
+                    return;
                 }
+                nbLocomotiveTete++;
             }
         }else{
             vehicules.add(vehicules.size()-1,locomotive);
@@ -57,24 +73,22 @@ public class Train {
     public void supprimerLocomotive(Locomotive locomotive) throws Exception {
         ArrayList<Locomotive> locomotiveArrayList = new ArrayList<>();
 
-        for (int i = 0; i < vehicules.size(); i++){
-            if (vehicules.get(i) instanceof Locomotive){
-                break;
+        for(VehiculeFerroviaire vehicule : vehicules){
+            if (vehicule instanceof Locomotive){
+                if(!vehicule.equals(locomotive))
+                    locomotiveArrayList.add((Locomotive) vehicule);
             }
         }
+        vehicules.removeIf(vehicule -> vehicule instanceof Locomotive);
 
-        while (vehicules.get(0) instanceof Locomotive){
-            if(!vehicules.get(0).equals(locomotive))
-                locomotiveArrayList.add((Locomotive) vehicules.get(0));
-            vehicules.remove(0);
-        }
-
+        int nbLoc = 0;
         for (Locomotive locomotive1 : locomotiveArrayList) {
-            locomotiveArrayList.add(locomotive1);
+            this.ajoutLocomotive(locomotive1,nbLoc);
+            nbLoc++;
         }
 
         if (this.getCapaciteTractionTotale() < this.getPoidsTotal()) {
-            this.ajoutLocomotive(locomotive);
+            this.ajoutLocomotive(locomotive,nbLoc);
             throw new Exception("il n'est pas possible de supprimer cette locomotive tout en gardant le train valide");
         }
 
@@ -134,12 +148,23 @@ public class Train {
     }
 
     public double getPlacesRestantes(){
+        if(this.typeDeTrain == TypeTrain.MARCHANDISES)
+        {
+            System.out.println("Ceci est un train de marchandises !");
+            return 0;
+        }
         double places = 0;
         for (VehiculeFerroviaire vehicule : vehicules) {
             if(vehicule instanceof Voiture )
                 places += vehicule.getCapaciteRestante();
         }
         return places;
+    }
+
+    public void modifierNombrePassagers(){
+        for(VehiculeFerroviaire vehicule : vehicules) {
+            if(vehicule instanceof Voiture)
+        }
     }
 
     //verifier s'il est possible de passer par un tunnel
@@ -193,22 +218,21 @@ public class Train {
                         return;
                     }
                     nbCont++;
-                    poidSupp += vehicule.chargeMaximale;
+                    poidSupp += vehicule.getChargeMaximale();
                 }
             }
         }
         System.out.println("nombre de conteneur supplementaire : "+nbCont + " ; poids supplémentaire possible (avec traction) : "+poidSupp);
     }
 
-    //Si la capaciteRestante = 0 a la fin de l'execution traitement du methode le train ne peut pas accepter des produits réfrigérés supplémentaires
+    //Si la capaciteRestante = 0 a la fin de l'execution du methode le train ne peut pas accepter des produits réfrigérés supplémentaires
     public void verifierFrigo(){
         double capaciteRestante = 0;
         for (VehiculeFerroviaire vehicule : vehicules) {
             if(vehicule instanceof WagonFrigorifique )
                 capaciteRestante += vehicule.getCapaciteRestante();
         }
-        double x = this.getCapaciteTractionTotale() - this.getPoidsTotal() - capaciteRestante;
-        System.out.println("poids supplémentaire possible (avec traction) : "+ (x < 0 ? 0 : x));
+        System.out.println("poids supplémentaire possible : "+ capaciteRestante);
     }
 
     public void affichage(){
@@ -218,7 +242,7 @@ public class Train {
             System.out.print("-");
         }
 
-        System.out.println("Complete :");
+        System.out.println("\nComplete :");
         for (VehiculeFerroviaire vehiculeFerroviaire : vehicules) {
             System.out.println(vehiculeFerroviaire.type+" " +vehiculeFerroviaire.toString());
         }
@@ -246,7 +270,6 @@ public class Train {
                     }
                 }
             }
-
         } catch(Exception e){
             System.out.println("Nombre de locomotives enlever: "+x);
         }
@@ -256,19 +279,48 @@ public class Train {
     public void modifierTunnel(double hauteur)  {
         while(!this.verifierHauteur(hauteur)){
             for(VehiculeFerroviaire vehicule : vehicules){
-                if(vehicule.getHauteur() > hauteur){
+                if(vehicule.getHauteur() >= hauteur){
                     if(vehicule instanceof Wagon)
+                    {
                         this.supprimerWagon((Wagon) vehicule);
+                        break;
+                    }
                     else
                     {
                         try{
                             this.supprimerLocomotive((Locomotive) vehicule);
                         }catch (Exception e){
-
+                            //Remplacement du locomotive avec hauteur invalide
+                            if (vehicule instanceof LocomotiveDieselElectrique)
+                                this.ajoutLocomotive(new LocomotiveDieselElectrique(
+                                        vehicule.isMatiereDangereuse(),
+                                        vehicule.getPoidsAVide(),
+                                        vehicule.getVitesseMaximale(),
+                                        vehicule.getChargeMaximale(),
+                                        vehicule.getLongueur(),
+                                        hauteur,
+                                        vehicule.getTraction(),
+                                        ((LocomotiveDieselElectrique) vehicule).getCapaciteReservoir()),0);
+                            else if (vehicule instanceof LocomotiveElectrique)
+                                this.ajoutLocomotive(new LocomotiveDieselElectrique(
+                                        vehicule.isMatiereDangereuse(),
+                                        vehicule.getPoidsAVide(),
+                                        vehicule.getVitesseMaximale(),
+                                        vehicule.getChargeMaximale(),
+                                        vehicule.getLongueur(),
+                                        hauteur,
+                                        vehicule.getTraction(),
+                                        ((LocomotiveElectrique) vehicule).getChargeElectrique()),0);
+                            //Maintenant on peut supprimer l'ancien locomotive
+                            try{
+                                this.supprimerLocomotive((Locomotive) vehicule);
+                                break;
+                            }catch (Exception e1){
+                                System.out.println(e1.getMessage());
+                            }
                         }
 
                     }
-                    break;
                 }
             }
         }
@@ -276,30 +328,53 @@ public class Train {
 
     public void modifierPont(double chargeMaximale){
         double poidsADecharger = this.getPoidsTotal() - chargeMaximale;
+        if (poidsADecharger < 0)
+        {
+            System.out.println("Le train peut passer par ce pont.");
+            return;
+        }
         this.decharger(poidsADecharger);
-        //Si le decharge du train n'est pas suffisant, on enleve des wagons/locomotives.
+        //Si le decharge n'est pas suffisant, on enleve des wagons/locomotives.
         while(!this.verifierPoids(chargeMaximale)){
             for(VehiculeFerroviaire vehicule : vehicules){
                 if(this.nbLocomotive == this.vehicules.size()){
-                    this.supprimerLocomotive((Locomotive) vehicule);
+                    try{
+                        this.supprimerLocomotive((Locomotive) vehicule);
+                        break;
+                    }
+                    catch (Exception e){
+                        System.out.println("Ce train est invalide.");
+                        return;
+                    }
                 }
                 else if(vehicule instanceof Wagon){
                     this.supprimerWagon((Wagon) vehicule);
+                    break;
                 }
             }
         }
+        System.out.println("Le train peut passer par ce pont.");
     }
 
     public boolean estValide() {
+        if (this.getCapaciteTractionTotale() < this.getPoidsTotal()) {
+            System.out.println("La capacite de traction des locomotives n'est pas suffisante !");
+            return false;
+        }
         for (VehiculeFerroviaire vehicule : vehicules) {
             if (!vehicule.estValideSur(this.typeDeTrain))
-                return false;
-            if (vehicule.getSurcapacite() != 0)
-                return false;
-            if (this.getCapaciteTractionTotale() - this.getPoidsTotal() < 0) {
+            {
+                System.out.println("Un vehicule du Type "+ vehicule.getType() +" est incompatible avec ce train de type "+ this.typeDeTrain +" !");
                 return false;
             }
+            if (vehicule.getSurcapacite() != 0)
+            {
+                System.out.println("Un vehicule de type "+ vehicule.getType() +" est en surcapacité !");
+                return false;
+            }
+
         }
+        System.out.println("La composition du train est valide !");
         return true;
     }
 

@@ -1,16 +1,10 @@
 
 public abstract class Locomotive extends VehiculeFerroviaire{
 
-    double capaciteTraction;
-
-    TypeWagon type;
-
-    public double getCapaciteTraction() {
-        return capaciteTraction;
-    }
+    private double capaciteTraction;
 
     public double getPoidsTotale(){
-        return this.poidsAVide;
+        return this.getPoidsAVide();
     }
 
     public double getTraction(){
@@ -24,6 +18,5 @@ public abstract class Locomotive extends VehiculeFerroviaire{
     public Locomotive(boolean matiereDangereuse, double poidsAVide, double vitessemaximale, double chargeMaximale, double longueur, double hauteur, double capaciteTraction) {
         super(matiereDangereuse, poidsAVide, vitessemaximale, chargeMaximale, longueur, hauteur);
         this.capaciteTraction = capaciteTraction;
-        this.type = TypeWagon.LOCO;
     }
 }

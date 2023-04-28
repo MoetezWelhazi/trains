@@ -1,33 +1,27 @@
 
 public abstract class VehiculeFerroviaire {
 
-    boolean matiereDangereuse;
+    private boolean matiereDangereuse;
 
-    double poidsAVide;
+    private double poidsAVide;
 
-    double vitessemaximale;
+    private double vitessemaximale;
 
-    double chargeMaximale;
+    private double chargeMaximale;
 
-    double longueur;
+    private double longueur;
 
-    double hauteur;
+    private double hauteur;
 
     TypeWagon type;
 
     public abstract boolean estValideSur(TypeTrain typeTrain);
 
-    public double getPoidsAVide() {
-        return poidsAVide;
-    }
+    public double getPoidsAVide() { return poidsAVide; }
 
-    public double getVitesseMaximale() {
-        return vitessemaximale;
-    }
+    public double getVitesseMaximale() { return vitessemaximale; }
 
-    public double getChargeMaximale() {
-        return chargeMaximale;
-    }
+    public double getChargeMaximale() { return chargeMaximale; }
 
     public double getLongueur() {
         return longueur;
@@ -36,6 +30,8 @@ public abstract class VehiculeFerroviaire {
     public double getHauteur() {
         return hauteur;
     }
+
+    public TypeWagon getType() { return type;}
 
     public boolean isMatiereDangereuse() {
         return matiereDangereuse;
